@@ -13,9 +13,9 @@ declare global {
 }
 
 export const jwtCheck = auth({
-  audience: process.env.AUTH0_AUDIENCE||'mern-frontend-food-app-api',
-  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL||'dev-zo4j72a4fhl6atek.us.auth0.com',
-  tokenSigningAlg: "HS256",
+  audience: process.env.AUTH0_AUDIENCE || 'mern-frontend-food-app-api',
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL || 'https://dev-zo4j72a4fhl6atek.us.auth0.com/',
+  tokenSigningAlg: "RS256",
 });
 
 export const jwtParse = async (
@@ -29,11 +29,13 @@ export const jwtParse = async (
     return res.sendStatus(401);
   }
 
-  // Bearer lshdflshdjkhvjkshdjkvh34h5k3h54jkh
   const token = authorization.split(" ")[1];
 
   try {
-    const decoded = jwt.decode(token) as jwt.JwtPayload|string;
+    const decoded = jwt.decode(token) as jwt.JwtPayload | string;
+    if (typeof decoded === 'string' || !decoded.sub) {
+      return res.sendStatus(401);
+    }
     const auth0Id = decoded.sub;
 
     const user = await User.findOne({ auth0Id });
