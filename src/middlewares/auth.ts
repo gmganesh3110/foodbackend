@@ -15,8 +15,7 @@ declare global {
 export const jwtCheck = auth({
   audience: process.env.AUTH0_AUDIENCE||'mern-frontend-food-app-api',
   issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL||'dev-zo4j72a4fhl6atek.us.auth0.com',
-  secret:process.env.JWT_SECRET,
-  tokenSigningAlg: "RS256",
+  tokenSigningAlg: "HS256",
 });
 
 export const jwtParse = async (
